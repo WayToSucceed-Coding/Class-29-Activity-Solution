@@ -44,33 +44,17 @@ class GameObject:
         self.fruit_type=fruit_type
         self.is_bomb=is_bomb
 
+    #Drawing the object on screen
     def draw(self):    
         if self.is_bomb:
-            screen.blit(bomb_image,(self.x,self.y))
-        else:
             screen.blit(fruit_images[self.fruit_type],(self.x,self.y))
+        else:
+            screen.blit(bomb_image,(self.x,self.y))
 
     def move(self):
         self.x +=self.speed_x
         self.y -=self.speed_y
         self.speed_y -=self.gravity
-
-class Swipe:
-
-    def __init__(self):
-        self.positions=[]
-
-    def update(self,x,y):
-        
-        self.positions.append((x,y))
-
-        if len(self.positions)>4:
-            self.positions.pop(0)
-
-    def draw(self):
-
-        if len(self.positions)>2:
-            pygame.draw.lines(screen,(255,255,255),False,self.positions,2)
 
 
 running=True
@@ -83,7 +67,6 @@ last_spawn_time=0
 
 game_state='start'
 
-swipe=Swipe()
 
 while running:
     
@@ -95,15 +78,6 @@ while running:
         if event.type==pygame.KEYDOWN and event.key==pygame.K_RETURN and game_state=='start':
             game_state='play'
 
-        if event.type==pygame.MOUSEMOTION and game_state=='play':
-
-            x,y=event.pos
-            swipe.update(x,y)
-
-        else:
-
-            swipe.positions=[]
-
     if game_state=='start':
         
         screen.blit(welcome_bg,(0,0))
@@ -111,8 +85,6 @@ while running:
     elif game_state=='play':
 
         screen.blit(bg,(0,0))
-
-        swipe.draw()
 
         current_time=pygame.time.get_ticks()
 
